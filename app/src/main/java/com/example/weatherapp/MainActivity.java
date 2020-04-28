@@ -100,20 +100,31 @@ public class MainActivity extends AppCompatActivity {
                 JSONObject jsonObject = new JSONObject(result);
                 String weatherInfo = jsonObject.getString("weather");
 
-                JSONArray arr = new JSONArray(weatherInfo);
+                String tempInfo = jsonObject.getString("main");
+                JSONObject jsonTemp = new JSONObject(tempInfo);
 
-                for(int i = 0; i<arr.length(); i++) {
+                JSONArray jsonWeather = new JSONArray(weatherInfo);
 
-                    JSONObject jsonPart = arr.getJSONObject(i);
+                for(int i = 0; i<jsonWeather.length(); i++) {
 
-                    String main = "";
-                    String description = "";
+                    JSONObject jsonPart = jsonWeather.getJSONObject(i);
+
+                    String main = "", description = "", temp = "", feels_like = "", temp_min = "", temp_max = "";
 
                     main = jsonPart.getString("main");
                     description = jsonPart.getString("description");
+                    temp = jsonTemp.get("temp").toString();
+                    feels_like = jsonTemp.get("feels_like").toString();
+                    temp_min = jsonTemp.get("temp_min").toString();
+                    temp_max = jsonTemp.get("temp_max").toString();
 
-                    if(main != "" && description != "") {
-                        message += main + ": " + description + "\n";
+                    if(main != "") {
+                        message += main
+                                + ": "
+                                + description
+                                + "\n\nTemperature: " + temp + " \u2103" +
+                                "\n\nFeels Like: " + feels_like + " \u2103" +
+                                "\n\nMax/Min: " + temp_max + "/" + temp_min + " \u2103";
                     }
                 }
 
