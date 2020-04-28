@@ -6,7 +6,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -18,7 +17,6 @@ import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -30,37 +28,34 @@ public class MainActivity extends AppCompatActivity {
 
     public void checkWeather(View view) {
 
-        //removing accidental space if added by user into city name which causes failure of weather fetching
-        String temp = cityName.getText().toString();
-        if (temp.charAt(temp.length()-1) == ' ') {
-
-            temp = temp.substring(0, temp.length()-1);
-            cityName.setText(temp);
-        }
-
-        //hide keyboard after entering city name
         InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        mgr.hideSoftInputFromWindow(cityName.getWindowToken(), 0);
 
-        //encoding not required afaik coz it worked without doing it as well
         try {
+            if (cityName.getText().toString().equals("")) {
+                mgr.hideSoftInputFromWindow(cityName.getWindowToken(), 0);
+                throw new Exception();
+            }
+
+            //removing accidental space if added by user into city name which causes failure of weather fetching
+            String temp = cityName.getText().toString();
+            if (temp.charAt(temp.length()-1) == ' ') {
+
+                temp = temp.substring(0, temp.length()-1);
+                cityName.setText(temp);
+            }
+
+            //hide keyboard after entering city name
+            mgr.hideSoftInputFromWindow(cityName.getWindowToken(), 0);
+
+            //encoding not required afaik coz it worked without doing it as well
             String encodedCityName = URLEncoder.encode(cityName.getText().toString(), "UTF-8");
 
             DownloadTask task = new DownloadTask();
-            task.execute("https://api.openweathermap.org/data/2.5/weather?q=" + encodedCityName + "&APPID=ae989d951e10ce6494c0dacc10903145");
-        } catch (UnsupportedEncodingException e) {
+            task.execute("https://api.openweathermap.org/data/2.5/weather?q=" + encodedCityName + "&units=metric&APPID=ae989d951e10ce6494c0dacc10903145");
+        } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(getApplicationContext(), "Please enter a valid city", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        cityName = findViewById(R.id.cityName);
-        resultText = findViewById(R.id.resultText);
     }
 
     public class DownloadTask extends AsyncTask<String, Void, String> {
@@ -133,5 +128,14 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Please enter a valid city", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        cityName = findViewById(R.id.cityName);
+        resultText = findViewById(R.id.resultText);
     }
 }
