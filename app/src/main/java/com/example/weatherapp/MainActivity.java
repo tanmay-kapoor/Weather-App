@@ -40,7 +40,10 @@ public class MainActivity extends AppCompatActivity {
             String temp = cityName.getText().toString();
             if (temp.charAt(temp.length()-1) == ' ') {
 
-                temp = temp.substring(0, temp.length()-1);
+                int index = temp.indexOf(' ');
+                if(temp.charAt(index + 1) == ' ') {
+                    temp = temp.substring(0, index);
+                }
                 cityName.setText(temp);
             }
 
