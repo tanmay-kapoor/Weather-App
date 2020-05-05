@@ -6,6 +6,8 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
+import android.text.Editable;
+import android.text.Selection;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -43,9 +45,15 @@ public class MainActivity extends AppCompatActivity {
                 int index = temp.indexOf(' ');
                 if(temp.charAt(index + 1) == ' ') {
                     temp = temp.substring(0, index);
+                } else {
+                    int realIndex = temp.indexOf(' ', index + 1);
+                    temp = temp.substring(0, realIndex);
                 }
                 cityName.setText(temp);
             }
+            int position = cityName.length();
+            Editable city = cityName.getText();
+            Selection.setSelection(city, position);
 
             //hide keyboard after entering city name
             mgr.hideSoftInputFromWindow(cityName.getWindowToken(), 0);
