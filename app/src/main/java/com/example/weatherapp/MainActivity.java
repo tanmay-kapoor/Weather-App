@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(getApplicationContext(), "Please enter a valid city", Toast.LENGTH_SHORT).show();
+            mgr.hideSoftInputFromWindow(cityName.getWindowToken(), 0);
         }
     }
 
