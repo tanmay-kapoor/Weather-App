@@ -43,11 +43,16 @@ public class MainActivity extends AppCompatActivity {
             if (temp.charAt(temp.length()-1) == ' ') {
 
                 int index = temp.indexOf(' ');
-                if(temp.charAt(index + 1) == ' ') {
-                    temp = temp.substring(0, index);
+
+                if (index != temp.length()-1) {
+                    if(temp.charAt(index + 1) == ' ') {
+                        temp = temp.substring(0, index);
+                    } else {
+                        int realIndex = temp.indexOf(' ', index + 1);
+                        temp = temp.substring(0, realIndex);
+                    }
                 } else {
-                    int realIndex = temp.indexOf(' ', index + 1);
-                    temp = temp.substring(0, realIndex);
+                    temp = temp.substring(0, index);
                 }
                 cityName.setText(temp);
             }
