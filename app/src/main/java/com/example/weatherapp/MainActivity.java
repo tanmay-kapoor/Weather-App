@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             if (cityName.getText().toString().equals("")) {
+                resultText.setVisibility(View.INVISIBLE);
                 mgr.hideSoftInputFromWindow(cityName.getWindowToken(), 0);
                 throw new Exception();
             }
